@@ -17,318 +17,553 @@
 
     <title>Memória+ | Jogo da Memória</title>
 
-    <link rel="stylesheet" href="style.css">
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
 
 </head>
 
 
 <body>
 
-    <main class="container">
-
-        <!-- ==========================
-             MENU PRINCIPAL
-        =========================== -->
-
-        <section id="menu">
-
-            <header class="header">
-
-                <h1>🧠 Memória+</h1>
-
-                <p>
-                    Aprenda brincando!
-                </p>
-
-            </header>
+<main class="container">
 
 
-            <div class="menu-card">
+    <!-- ================================
+         MENU PRINCIPAL
+    ================================= -->
+
+    <section id="menu">
+
+        <header class="header">
+
+            <div class="brand">
+
+                <div class="brand-icon">
+                    🧠
+                </div>
+
+                <div>
+
+                    <h1>
+                        Memória<span>+</span>
+                    </h1>
+
+                    <p>
+                        Aprenda brincando!
+                    </p>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <section class="menu-card">
+
+            <div class="menu-intro">
+
+                <span class="intro-label">
+                    🧠 JOGO DA MEMÓRIA EDUCATIVO
+                </span>
 
                 <h2>
                     Escolha uma categoria
                 </h2>
 
+                <p>
+                    Escolha um tema e teste sua memória.
+                </p>
 
-                <div class="categories">
+            </div>
 
-                    <button
-                        class="category animal"
-                        data-category="animals"
-                    >
+
+            <!-- CATEGORIAS -->
+
+            <div class="categories">
+
+                <button
+                    class="category animal"
+                    data-category="animals"
+                    type="button"
+                >
+
+                    <span class="category-icon">
                         🐶
-                        <span>Animais</span>
-                    </button>
+                    </span>
+
+                    <span>
+                        Animais
+                    </span>
+
+                </button>
 
 
-                    <button
-                        class="category math"
-                        data-category="math"
-                    >
+                <button
+                    class="category math"
+                    data-category="math"
+                    type="button"
+                >
+
+                    <span class="category-icon">
                         ➕
-                        <span>Matemática</span>
-                    </button>
+                    </span>
+
+                    <span>
+                        Matemática
+                    </span>
+
+                </button>
 
 
-                    <button
-                        class="category geography"
-                        data-category="geography"
-                    >
+                <button
+                    class="category geography"
+                    data-category="geography"
+                    type="button"
+                >
+
+                    <span class="category-icon">
                         🌎
-                        <span>Geografia</span>
-                    </button>
+                    </span>
+
+                    <span>
+                        Geografia
+                    </span>
+
+                </button>
 
 
-                    <button
-                        class="category science"
-                        data-category="science"
-                    >
+                <button
+                    class="category science"
+                    data-category="science"
+                    type="button"
+                >
+
+                    <span class="category-icon">
                         🔬
-                        <span>Ciências</span>
-                    </button>
+                    </span>
 
-                </div>
+                    <span>
+                        Ciências
+                    </span>
 
+                </button>
+
+            </div>
+
+
+            <!-- DIFICULDADE -->
+
+            <div class="section-title">
+
+                <span></span>
 
                 <h2>
                     Escolha a dificuldade
                 </h2>
 
-
-                <div class="difficulty">
-
-                    <button
-                        class="difficulty-button easy"
-                        data-difficulty="easy"
-                    >
-                        🟢 Fácil
-                    </button>
-
-
-                    <button
-                        class="difficulty-button medium"
-                        data-difficulty="medium"
-                    >
-                        🟡 Médio
-                    </button>
-
-
-                    <button
-                        class="difficulty-button hard"
-                        data-difficulty="hard"
-                    >
-                        🔴 Difícil
-                    </button>
-
-                </div>
-
-
-                <p
-                    id="message"
-                    class="message"
-                >
-                    Escolha uma categoria e uma dificuldade.
-                </p>
-
-
-                <button
-                    id="start-button"
-                    class="start-button"
-                >
-                    🚀 Começar jogo
-                </button>
+                <span></span>
 
             </div>
 
-        </section>
 
+            <div class="difficulty">
 
-        <!-- ==========================
-             JOGO
-        =========================== -->
-
-        <section
-            id="game"
-            class="hidden"
-        >
-
-            <div class="game-header">
-
-                <div>
-
-                    <h1>
-                        🧠 Memória+
-                    </h1>
-
-                    <p id="category-name">
-                        Jogo da memória
-                    </p>
-
-                </div>
+                <button
+                    class="difficulty-button easy"
+                    data-difficulty="easy"
+                    type="button"
+                >
+                    🟢 Fácil
+                </button>
 
 
                 <button
-                    id="back-button"
-                    class="back-button"
+                    class="difficulty-button medium"
+                    data-difficulty="medium"
+                    type="button"
                 >
-                    ← Menu
+                    🟡 Médio
+                </button>
+
+
+                <button
+                    class="difficulty-button hard"
+                    data-difficulty="hard"
+                    type="button"
+                >
+                    🔴 Difícil
                 </button>
 
             </div>
 
 
-            <!-- PLACAR -->
-
-            <div class="score-board">
-
-                <div class="score-box">
-
-                    <span>🎯</span>
-
-                    <strong>
-                        Pontos
-                    </strong>
-
-                    <span id="score">
-                        0
-                    </span>
-
-                </div>
+            <p
+                id="message"
+                class="message"
+            >
+                Escolha uma categoria e uma dificuldade.
+            </p>
 
 
-                <div class="score-box">
-
-                    <span>🔢</span>
-
-                    <strong>
-                        Tentativas
-                    </strong>
-
-                    <span id="attempts">
-                        0
-                    </span>
-
-                </div>
-
-
-                <div class="score-box">
-
-                    <span>⏱️</span>
-
-                    <strong>
-                        Tempo
-                    </strong>
-
-                    <span id="timer">
-                        00:00
-                    </span>
-
-                </div>
-
-            </div>
-
-
-            <!-- TABULEIRO -->
-
-            <div
-                id="game-board"
-                class="game-board"
+            <button
+                id="start-button"
+                class="start-button"
+                type="button"
             >
 
-            </div>
+                🚀 Começar jogo
+
+            </button>
 
         </section>
 
 
-        <!-- ==========================
-             VITÓRIA
-        =========================== -->
+        <!-- RECURSOS -->
 
-        <section
-            id="victory"
-            class="hidden"
-        >
+        <div class="feature-strip">
 
-            <div class="victory-card">
+            <div class="feature">
+                <span>🏆</span>
 
-                <div class="trophy">
-                    🏆
+                <div>
+                    <strong>Pontuação</strong>
+                    <small>Ganhe pontos</small>
                 </div>
+            </div>
 
+
+            <div class="feature">
+                <span>❤️</span>
+
+                <div>
+                    <strong>Vidas</strong>
+                    <small>Três chances</small>
+                </div>
+            </div>
+
+
+            <div class="feature">
+                <span>🔥</span>
+
+                <div>
+                    <strong>Combo</strong>
+                    <small>Acerte em sequência</small>
+                </div>
+            </div>
+
+
+            <div class="feature">
+                <span>⏱️</span>
+
+                <div>
+                    <strong>Tempo</strong>
+                    <small>Desafie-se</small>
+                </div>
+            </div>
+
+
+            <div class="feature">
+                <span>📱</span>
+
+                <div>
+                    <strong>Responsivo</strong>
+                    <small>Qualquer dispositivo</small>
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================================
+         JOGO
+    ================================= -->
+
+    <section
+        id="game"
+        class="hidden"
+    >
+
+        <div class="game-header">
+
+            <div>
 
                 <h1>
-                    Parabéns!
+                    🧠 Memória+
                 </h1>
 
-
-                <p>
-                    Você encontrou todos os pares!
+                <p id="category-name">
+                    Jogo da memória
                 </p>
-
-
-                <div class="results">
-
-                    <div>
-                        🎯
-                        <strong>
-                            Pontos
-                        </strong>
-
-                        <span id="final-score">
-                            0
-                        </span>
-                    </div>
-
-
-                    <div>
-                        🔢
-                        <strong>
-                            Tentativas
-                        </strong>
-
-                        <span id="final-attempts">
-                            0
-                        </span>
-                    </div>
-
-
-                    <div>
-                        ⏱️
-                        <strong>
-                            Tempo
-                        </strong>
-
-                        <span id="final-time">
-                            00:00
-                        </span>
-                    </div>
-
-                </div>
-
-
-                <button
-                    id="play-again"
-                    class="start-button"
-                >
-                    🔄 Jogar novamente
-                </button>
-
-
-                <button
-                    id="victory-menu"
-                    class="back-button"
-                >
-                    🏠 Voltar ao menu
-                </button>
 
             </div>
 
-        </section>
 
-    </main>
+            <button
+                id="back-button"
+                class="back-button"
+                type="button"
+            >
+                🏠 Menu
+            </button>
+
+        </div>
 
 
-    <script src="script.js"></script>
+        <!-- PLACAR -->
+
+        <div class="score-board">
+
+            <div class="score-box">
+
+                <span>🎯</span>
+
+                <strong>
+                    Pontos
+                </strong>
+
+                <span id="score">
+                    0
+                </span>
+
+            </div>
+
+
+            <div class="score-box">
+
+                <span>❤️</span>
+
+                <strong>
+                    Vidas
+                </strong>
+
+                <span id="lives">
+                    ❤️ ❤️ ❤️
+                </span>
+
+            </div>
+
+
+            <div class="score-box">
+
+                <span>🔥</span>
+
+                <strong>
+                    Combo
+                </strong>
+
+                <span id="combo">
+                    0
+                </span>
+
+            </div>
+
+
+            <div class="score-box">
+
+                <span>🔢</span>
+
+                <strong>
+                    Tentativas
+                </strong>
+
+                <span id="attempts">
+                    0
+                </span>
+
+            </div>
+
+
+            <div class="score-box">
+
+                <span>⏱️</span>
+
+                <strong>
+                    Tempo
+                </strong>
+
+                <span id="timer">
+                    00:00
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- TABULEIRO -->
+
+        <div
+            id="game-board"
+            class="game-board"
+        ></div>
+
+    </section>
+
+
+    <!-- ================================
+         VITÓRIA
+    ================================= -->
+
+    <section
+        id="victory"
+        class="hidden"
+    >
+
+        <div class="result-card victory-card">
+
+            <div class="result-icon">
+                🏆
+            </div>
+
+            <h1>
+                Parabéns!
+            </h1>
+
+            <p>
+                Você encontrou todos os pares!
+            </p>
+
+
+            <div class="results">
+
+                <div>
+                    <span>🎯</span>
+                    <strong>Pontos</strong>
+                    <span id="final-score">0</span>
+                </div>
+
+
+                <div>
+                    <span>🔥</span>
+                    <strong>Melhor combo</strong>
+                    <span id="final-combo">0</span>
+                </div>
+
+
+                <div>
+                    <span>🔢</span>
+                    <strong>Tentativas</strong>
+                    <span id="final-attempts">0</span>
+                </div>
+
+
+                <div>
+                    <span>⏱️</span>
+                    <strong>Tempo</strong>
+                    <span id="final-time">00:00</span>
+                </div>
+
+            </div>
+
+
+            <button
+                id="play-again"
+                class="start-button"
+                type="button"
+            >
+                🔄 Jogar novamente
+            </button>
+
+
+            <button
+                id="victory-menu"
+                class="back-button result-menu-button"
+                type="button"
+            >
+                🏠 Voltar ao menu
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================================
+         GAME OVER
+    ================================= -->
+
+    <section
+        id="game-over"
+        class="hidden"
+    >
+
+        <div class="result-card game-over-card">
+
+            <div class="result-icon">
+                💔
+            </div>
+
+            <h1>
+                Fim de jogo!
+            </h1>
+
+            <p>
+                Você ficou sem vidas.
+            </p>
+
+
+            <div class="results">
+
+                <div>
+                    <span>🎯</span>
+                    <strong>Pontos</strong>
+                    <span id="game-over-score">0</span>
+                </div>
+
+
+                <div>
+                    <span>🔥</span>
+                    <strong>Melhor combo</strong>
+                    <span id="game-over-combo">0</span>
+                </div>
+
+
+                <div>
+                    <span>🔢</span>
+                    <strong>Tentativas</strong>
+                    <span id="game-over-attempts">0</span>
+                </div>
+
+
+                <div>
+                    <span>⏱️</span>
+                    <strong>Tempo</strong>
+                    <span id="game-over-time">00:00</span>
+                </div>
+
+            </div>
+
+
+            <button
+                id="retry-button"
+                class="start-button"
+                type="button"
+            >
+                🔄 Tentar novamente
+            </button>
+
+
+            <button
+                id="game-over-menu"
+                class="back-button result-menu-button"
+                type="button"
+            >
+                🏠 Voltar ao menu
+            </button>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<script src="script.js"></script>
 
 </body>
 

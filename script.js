@@ -1,118 +1,12 @@
-// ==========================================
-// MEMÓRIA+
-// JOGO DA MEMÓRIA
-// ==========================================
+/* =========================================
+   MEMÓRIA+
+   JOGO DA MEMÓRIA EDUCATIVO
+========================================= */
 
 
-// ==========================================
-// DADOS DAS CARTAS
-// ==========================================
-
-const cardsData = {
-
-    animals: [
-        "🐶",
-        "🐱",
-        "🦁",
-        "🐯",
-        "🐸",
-        "🐵",
-        "🐼",
-        "🐨",
-        "🦊",
-        "🐰",
-        "🐷",
-        "🐮",
-        "🐔",
-        "🐧",
-        "🐙",
-        "🦋"
-    ],
-
-    math: [
-        "➕",
-        "➖",
-        "✖️",
-        "➗",
-        "🔢",
-        "💯",
-        "1️⃣",
-        "2️⃣",
-        "3️⃣",
-        "4️⃣",
-        "5️⃣",
-        "6️⃣",
-        "7️⃣",
-        "8️⃣",
-        "9️⃣",
-        "🔟"
-    ],
-
-    geography: [
-        "🌎",
-        "🌍",
-        "🌏",
-        "🏔️",
-        "🏝️",
-        "🏜️",
-        "🌋",
-        "🗺️",
-        "🏖️",
-        "🌊",
-        "🏕️",
-        "🗿",
-        "🗽",
-        "🗼",
-        "🏰",
-        "⛺"
-    ],
-
-    science: [
-        "🔬",
-        "🧬",
-        "🧪",
-        "⚗️",
-        "🔭",
-        "🧫",
-        "🦠",
-        "🌱",
-        "🌳",
-        "☀️",
-        "🌙",
-        "⚡",
-        "💧",
-        "🔥",
-        "🪐",
-        "🧠"
-    ]
-
-};
-
-
-// ==========================================
-// DIFICULDADES
-// ==========================================
-
-const difficulties = {
-
-    easy: {
-        pairs: 4
-    },
-
-    medium: {
-        pairs: 6
-    },
-
-    hard: {
-        pairs: 8
-    }
-
-};
-
-
-// ==========================================
-// ELEMENTOS
-// ==========================================
+/* =========================================
+   ELEMENTOS
+========================================= */
 
 const menu =
     document.querySelector("#menu");
@@ -122,6 +16,9 @@ const game =
 
 const victory =
     document.querySelector("#victory");
+
+const gameOverScreen =
+    document.querySelector("#game-over");
 
 const gameBoard =
     document.querySelector("#game-board");
@@ -138,11 +35,23 @@ const playAgainButton =
 const victoryMenuButton =
     document.querySelector("#victory-menu");
 
+const retryButton =
+    document.querySelector("#retry-button");
+
+const gameOverMenuButton =
+    document.querySelector("#game-over-menu");
+
 const message =
     document.querySelector("#message");
 
 const scoreElement =
     document.querySelector("#score");
+
+const livesElement =
+    document.querySelector("#lives");
+
+const comboElement =
+    document.querySelector("#combo");
 
 const attemptsElement =
     document.querySelector("#attempts");
@@ -150,26 +59,58 @@ const attemptsElement =
 const timerElement =
     document.querySelector("#timer");
 
-const finalScore =
-    document.querySelector("#final-score");
-
-const finalAttempts =
-    document.querySelector("#final-attempts");
-
-const finalTime =
-    document.querySelector("#final-time");
-
-const categoryName =
+const categoryNameElement =
     document.querySelector("#category-name");
 
+const finalScoreElement =
+    document.querySelector("#final-score");
 
-// ==========================================
-// ESTADO DO JOGO
-// ==========================================
+const finalComboElement =
+    document.querySelector("#final-combo");
+
+const finalAttemptsElement =
+    document.querySelector("#final-attempts");
+
+const finalTimeElement =
+    document.querySelector("#final-time");
+
+const gameOverScoreElement =
+    document.querySelector("#game-over-score");
+
+const gameOverComboElement =
+    document.querySelector("#game-over-combo");
+
+const gameOverAttemptsElement =
+    document.querySelector("#game-over-attempts");
+
+const gameOverTimeElement =
+    document.querySelector("#game-over-time");
+
+
+/* =========================================
+   BOTÕES
+========================================= */
+
+const categoryButtons =
+    document.querySelectorAll(
+        ".category"
+    );
+
+const difficultyButtons =
+    document.querySelectorAll(
+        ".difficulty-button"
+    );
+
+
+/* =========================================
+   ESTADO
+========================================= */
 
 let selectedCategory = null;
 
 let selectedDifficulty = null;
+
+let cards = [];
 
 let firstCard = null;
 
@@ -177,134 +118,270 @@ let secondCard = null;
 
 let lockBoard = false;
 
+let matchedPairs = 0;
+
 let score = 0;
 
-let attempts = 0;
+let lives = 3;
 
-let matchedPairs = 0;
+let combo = 0;
+
+let bestCombo = 0;
+
+let attempts = 0;
 
 let seconds = 0;
 
 let timerInterval = null;
 
 
-// ==========================================
-// SELECIONAR CATEGORIA
-// ==========================================
+/* =========================================
+   DIFICULDADES
+========================================= */
 
-document
-    .querySelectorAll(".category")
-    .forEach(button => {
+const difficultyConfig = {
 
-        button.addEventListener(
-            "click",
-            () => {
+    easy: {
+        pairs: 4
+    },
 
-                document
-                    .querySelectorAll(".category")
-                    .forEach(item => {
+    medium: {
+        pairs: 6
+    },
 
-                        item.classList.remove(
-                            "selected"
-                        );
+    hard: {
+        pairs: 8
+    }
 
-                    });
+};
 
 
-                button.classList.add(
-                    "selected"
-                );
+/* =========================================
+   CATEGORIAS
+========================================= */
+
+const categoryData = {
+
+    animals: [
+        "🐶",
+        "🐱",
+        "🦊",
+        "🐼",
+        "🐸",
+        "🐵",
+        "🦁",
+        "🐯"
+    ],
+
+    math: [
+        "➕",
+        "➖",
+        "✖️",
+        "➗",
+        "🔢",
+        "📐",
+        "📊",
+        "💯"
+    ],
+
+    geography: [
+        "🌎",
+        "🌍",
+        "🌏",
+        "🗺️",
+        "🏔️",
+        "🏝️",
+        "🌋",
+        "🏜️"
+    ],
+
+    science: [
+        "🔬",
+        "🧬",
+        "🧪",
+        "⚛️",
+        "🌡️",
+        "🧫",
+        "🔭",
+        "🧠"
+    ]
+
+};
 
 
-                selectedCategory =
-                    button.dataset.category;
+const categoryNames = {
+
+    animals: "🐶 Animais",
+
+    math: "➕ Matemática",
+
+    geography: "🌎 Geografia",
+
+    science: "🔬 Ciências"
+
+};
 
 
-                updateMessage();
+/* =========================================
+   SELECIONAR CATEGORIA
+========================================= */
 
-            }
+categoryButtons.forEach(button => {
 
-        );
+    button.addEventListener(
+        "click",
+        () => {
 
-    });
+            categoryButtons.forEach(
+                item => {
 
+                    item.classList.remove(
+                        "selected"
+                    );
 
-// ==========================================
-// SELECIONAR DIFICULDADE
-// ==========================================
-
-document
-    .querySelectorAll(".difficulty-button")
-    .forEach(button => {
-
-        button.addEventListener(
-            "click",
-            () => {
-
-                document
-                    .querySelectorAll(
-                        ".difficulty-button"
-                    )
-                    .forEach(item => {
-
-                        item.classList.remove(
-                            "selected"
-                        );
-
-                    });
+                }
+            );
 
 
-                button.classList.add(
-                    "selected"
-                );
+            button.classList.add(
+                "selected"
+            );
 
 
-                selectedDifficulty =
-                    button.dataset.difficulty;
+            selectedCategory =
+                button.dataset.category;
 
 
-                updateMessage();
+            updateMessage();
 
-            }
+        }
+    );
 
-        );
-
-    });
+});
 
 
-// ==========================================
-// ATUALIZAR MENSAGEM
-// ==========================================
+/* =========================================
+   SELECIONAR DIFICULDADE
+========================================= */
+
+difficultyButtons.forEach(button => {
+
+    button.addEventListener(
+        "click",
+        () => {
+
+            difficultyButtons.forEach(
+                item => {
+
+                    item.classList.remove(
+                        "selected"
+                    );
+
+                }
+            );
+
+
+            button.classList.add(
+                "selected"
+            );
+
+
+            selectedDifficulty =
+                button.dataset.difficulty;
+
+
+            updateMessage();
+
+        }
+    );
+
+});
+
+
+/* =========================================
+   MENSAGEM
+========================================= */
 
 function updateMessage() {
 
+    startButton.disabled =
+        !(
+            selectedCategory &&
+            selectedDifficulty
+        );
+
+
     if (
-        selectedCategory &&
-        selectedDifficulty
+        !selectedCategory &&
+        !selectedDifficulty
     ) {
-
-        message.textContent =
-            "✅ Tudo pronto! Clique em começar.";
-
-        message.style.color =
-            "#16a34a";
-
-    } else {
 
         message.textContent =
             "Escolha uma categoria e uma dificuldade.";
 
-        message.style.color =
-            "#6b7280";
+        message.className =
+            "message";
+
+        return;
 
     }
+
+
+    if (
+        selectedCategory &&
+        !selectedDifficulty
+    ) {
+
+        message.textContent =
+            `${categoryNames[selectedCategory]} selecionado. Agora escolha a dificuldade.`;
+
+        message.className =
+            "message message-info";
+
+        return;
+
+    }
+
+
+    if (
+        !selectedCategory &&
+        selectedDifficulty
+    ) {
+
+        const difficultyNames = {
+
+            easy: "🟢 Fácil",
+
+            medium: "🟡 Médio",
+
+            hard: "🔴 Difícil"
+
+        };
+
+
+        message.textContent =
+            `${difficultyNames[selectedDifficulty]} selecionado. Agora escolha uma categoria.`;
+
+        message.className =
+            "message message-info";
+
+        return;
+
+    }
+
+
+    message.textContent =
+        "🚀 Tudo pronto! Você pode começar o jogo.";
+
+    message.className =
+        "message message-success";
 
 }
 
 
-// ==========================================
-// COMEÇAR
-// ==========================================
+/* =========================================
+   INICIAR
+========================================= */
 
 startButton.addEventListener(
     "click",
@@ -312,20 +389,12 @@ startButton.addEventListener(
 );
 
 
-// ==========================================
-// INICIAR JOGO
-// ==========================================
-
 function startGame() {
 
     if (
         !selectedCategory ||
         !selectedDifficulty
     ) {
-
-        alert(
-            "⚠️ Escolha uma categoria e uma dificuldade."
-        );
 
         return;
 
@@ -339,62 +408,33 @@ function startGame() {
         "hidden"
     );
 
-
     victory.classList.add(
         "hidden"
     );
 
+    gameOverScreen.classList.add(
+        "hidden"
+    );
 
     game.classList.remove(
         "hidden"
     );
 
 
-    categoryName.textContent =
-        getCategoryName();
+    categoryNameElement.textContent =
+        categoryNames[selectedCategory];
 
 
     createBoard();
-
 
     startTimer();
 
 }
 
 
-// ==========================================
-// NOME DA CATEGORIA
-// ==========================================
-
-function getCategoryName() {
-
-    const names = {
-
-        animals:
-            "🐶 Animais",
-
-        math:
-            "➕ Matemática",
-
-        geography:
-            "🌎 Geografia",
-
-        science:
-            "🔬 Ciências"
-
-    };
-
-
-    return names[
-        selectedCategory
-    ];
-
-}
-
-
-// ==========================================
-// RESETAR JOGO
-// ==========================================
+/* =========================================
+   RESETAR
+========================================= */
 
 function resetGame() {
 
@@ -409,95 +449,80 @@ function resetGame() {
 
     lockBoard = false;
 
+    matchedPairs = 0;
+
     score = 0;
 
-    attempts = 0;
+    lives = 3;
 
-    matchedPairs = 0;
+    combo = 0;
+
+    bestCombo = 0;
+
+    attempts = 0;
 
     seconds = 0;
 
 
+    gameBoard.innerHTML = "";
+
+
     updateScore();
 
+    updateLives();
+
+    updateCombo();
+
+    updateAttempts();
 
     updateTimer();
 
 }
 
 
-// ==========================================
-// CRIAR TABULEIRO
-// ==========================================
+/* =========================================
+   TABULEIRO
+========================================= */
 
 function createBoard() {
 
-    gameBoard.innerHTML = "";
-
-
     const pairCount =
-        difficulties[
+        difficultyConfig[
             selectedDifficulty
         ].pairs;
 
 
-    const selectedCards =
-        cardsData[
+    const availableCards =
+        categoryData[
             selectedCategory
-        ].slice(
+        ];
+
+
+    const selectedCards =
+        availableCards.slice(
             0,
             pairCount
         );
 
 
-    const cards = [
+    cards = [
         ...selectedCards,
         ...selectedCards
     ];
 
 
-    shuffle(cards);
+    cards =
+        shuffle(cards);
 
 
     cards.forEach(
-        value => {
+        (symbol, index) => {
 
             const card =
-                document.createElement(
-                    "button"
+                createCard(
+                    symbol,
+                    index
                 );
-
-
-            card.classList.add(
-                "card"
-            );
-
-
-            card.innerHTML = `
-
-                <div class="card-inner">
-
-                    <div class="card-front">
-                        ?
-                    </div>
-
-                    <div class="card-back">
-                        ${value}
-                    </div>
-
-                </div>
-
-            `;
-
-
-            card.dataset.value =
-                value;
-
-
-            card.addEventListener(
-                "click",
-                () => flipCard(card)
-            );
 
 
             gameBoard.appendChild(
@@ -510,19 +535,80 @@ function createBoard() {
 }
 
 
-// ==========================================
-// EMBARALHAR
-// ==========================================
+/* =========================================
+   CARTA
+========================================= */
+
+function createCard(
+    symbol,
+    index
+) {
+
+    const card =
+        document.createElement(
+            "button"
+        );
+
+
+    card.type = "button";
+
+    card.className =
+        "card";
+
+
+    card.dataset.symbol =
+        symbol;
+
+    card.dataset.index =
+        index;
+
+
+    card.innerHTML = `
+
+        <div class="card-inner">
+
+            <div class="card-front">
+                ❓
+            </div>
+
+            <div class="card-back">
+                ${symbol}
+            </div>
+
+        </div>
+
+    `;
+
+
+    card.addEventListener(
+        "click",
+        () => flipCard(card)
+    );
+
+
+    return card;
+
+}
+
+
+/* =========================================
+   EMBARALHAR
+========================================= */
 
 function shuffle(array) {
 
+    const result =
+        [...array];
+
+
     for (
-        let i = array.length - 1;
+        let i =
+            result.length - 1;
         i > 0;
         i--
     ) {
 
-        const randomIndex =
+        const j =
             Math.floor(
                 Math.random() *
                 (i + 1)
@@ -530,42 +616,37 @@ function shuffle(array) {
 
 
         [
-            array[i],
-            array[randomIndex]
+            result[i],
+            result[j]
         ] = [
-            array[randomIndex],
-            array[i]
+            result[j],
+            result[i]
         ];
 
     }
 
+
+    return result;
+
 }
 
 
-// ==========================================
-// VIRAR CARTA
-// ==========================================
+/* =========================================
+   VIRAR CARTA
+========================================= */
 
 function flipCard(card) {
 
-    if (lockBoard) {
-        return;
-    }
-
-
     if (
-        card === firstCard
-    ) {
-        return;
-    }
-
-
-    if (
+        lockBoard ||
+        card === firstCard ||
         card.classList.contains(
             "matched"
         )
     ) {
+
         return;
+
     }
 
 
@@ -585,11 +666,9 @@ function flipCard(card) {
 
     secondCard = card;
 
-
     attempts++;
 
-
-    updateScore();
+    updateAttempts();
 
 
     checkMatch();
@@ -597,35 +676,38 @@ function flipCard(card) {
 }
 
 
-// ==========================================
-// VERIFICAR PAR
-// ==========================================
+/* =========================================
+   COMPARAR
+========================================= */
 
 function checkMatch() {
 
-    const isMatch =
-        firstCard.dataset.value ===
-        secondCard.dataset.value;
+    lockBoard = true;
 
 
-    if (isMatch) {
+    const match =
+        firstCard.dataset.symbol ===
+        secondCard.dataset.symbol;
 
-        correctMatch();
+
+    if (match) {
+
+        handleMatch();
 
     } else {
 
-        incorrectMatch();
+        handleMismatch();
 
     }
 
 }
 
 
-// ==========================================
-// ACERTO
-// ==========================================
+/* =========================================
+   ACERTO
+========================================= */
 
-function correctMatch() {
+function handleMatch() {
 
     firstCard.classList.add(
         "matched"
@@ -639,27 +721,99 @@ function correctMatch() {
     matchedPairs++;
 
 
-    score += 100;
+    combo++;
+
+
+    if (combo > bestCombo) {
+
+        bestCombo = combo;
+
+    }
+
+
+    const points =
+        calculatePoints();
+
+
+    score += points;
 
 
     updateScore();
 
+    updateCombo();
 
-    resetSelection();
+
+    setTimeout(
+        () => {
+
+            resetTurn();
 
 
-    checkVictory();
+            if (
+                matchedPairs ===
+                cards.length / 2
+            ) {
+
+                finishGame();
+
+            }
+
+        },
+        500
+    );
 
 }
 
 
-// ==========================================
-// ERRO
-// ==========================================
+/* =========================================
+   PONTUAÇÃO
+========================================= */
 
-function incorrectMatch() {
+function calculatePoints() {
 
-    lockBoard = true;
+    const base = 100;
+
+
+    const comboBonus =
+        (combo - 1) * 25;
+
+
+    const difficultyBonus = {
+
+        easy: 0,
+
+        medium: 25,
+
+        hard: 50
+
+    };
+
+
+    return (
+        base +
+        comboBonus +
+        difficultyBonus[
+            selectedDifficulty
+        ]
+    );
+
+}
+
+
+/* =========================================
+   ERRO
+========================================= */
+
+function handleMismatch() {
+
+    lives--;
+
+    combo = 0;
+
+
+    updateLives();
+
+    updateCombo();
 
 
     setTimeout(
@@ -674,20 +828,27 @@ function incorrectMatch() {
             );
 
 
-            resetSelection();
+            resetTurn();
+
+
+            if (lives <= 0) {
+
+                gameOver();
+
+            }
 
         },
-        800
+        900
     );
 
 }
 
 
-// ==========================================
-// RESETAR CARTAS
-// ==========================================
+/* =========================================
+   RESETAR TURNO
+========================================= */
 
-function resetSelection() {
+function resetTurn() {
 
     firstCard = null;
 
@@ -698,76 +859,101 @@ function resetSelection() {
 }
 
 
-// ==========================================
-// VERIFICAR VITÓRIA
-// ==========================================
+/* =========================================
+   PONTOS
+========================================= */
 
-function checkVictory() {
+function updateScore() {
 
-    const totalPairs =
-        difficulties[
-            selectedDifficulty
-        ].pairs;
+    scoreElement.textContent =
+        score;
+
+}
 
 
-    if (
-        matchedPairs !==
-        totalPairs
+/* =========================================
+   VIDAS
+========================================= */
+
+function updateLives() {
+
+    let hearts = "";
+
+
+    for (
+        let i = 0;
+        i < 3;
+        i++
     ) {
 
-        return;
+        if (i < lives) {
+
+            hearts += "❤️ ";
+
+        } else {
+
+            hearts += "🤍 ";
+
+        }
 
     }
 
+
+    livesElement.textContent =
+        hearts.trim();
+
+}
+
+
+/* =========================================
+   COMBO
+========================================= */
+
+function updateCombo() {
+
+    comboElement.textContent =
+        combo;
+
+
+    if (combo >= 3) {
+
+        comboElement.classList.add(
+            "combo-active"
+        );
+
+    } else {
+
+        comboElement.classList.remove(
+            "combo-active"
+        );
+
+    }
+
+}
+
+
+/* =========================================
+   TENTATIVAS
+========================================= */
+
+function updateAttempts() {
+
+    attemptsElement.textContent =
+        attempts;
+
+}
+
+
+/* =========================================
+   CRONÔMETRO
+========================================= */
+
+function startTimer() {
 
     clearInterval(
         timerInterval
     );
 
-
-    setTimeout(
-        showVictory,
-        500
-    );
-
-}
-
-
-// ==========================================
-// MOSTRAR VITÓRIA
-// ==========================================
-
-function showVictory() {
-
-    game.classList.add(
-        "hidden"
-    );
-
-
-    victory.classList.remove(
-        "hidden"
-    );
-
-
-    finalScore.textContent =
-        score;
-
-
-    finalAttempts.textContent =
-        attempts;
-
-
-    finalTime.textContent =
-        formatTime(seconds);
-
-}
-
-
-// ==========================================
-// CRONÔMETRO
-// ==========================================
-
-function startTimer() {
 
     timerInterval =
         setInterval(
@@ -784,131 +970,179 @@ function startTimer() {
 }
 
 
-// ==========================================
-// ATUALIZAR TEMPO
-// ==========================================
-
 function updateTimer() {
 
+    const minutes =
+        Math.floor(
+            seconds / 60
+        );
+
+
+    const remaining =
+        seconds % 60;
+
+
     timerElement.textContent =
-        formatTime(seconds);
+        `${String(minutes).padStart(2, "0")}:${String(remaining).padStart(2, "0")}`;
 
 }
 
 
-// ==========================================
-// FORMATAR TEMPO
-// ==========================================
+/* =========================================
+   VITÓRIA
+========================================= */
 
-function formatTime(totalSeconds) {
+function finishGame() {
 
-    const minutes =
-        Math.floor(
-            totalSeconds / 60
-        );
-
-
-    const remainingSeconds =
-        totalSeconds % 60;
+    clearInterval(
+        timerInterval
+    );
 
 
-    return (
-        String(minutes).padStart(
-            2,
-            "0"
-        )
-        +
-        ":"
-        +
-        String(remainingSeconds).padStart(
-            2,
-            "0"
-        )
+    finalScoreElement.textContent =
+        score;
+
+    finalComboElement.textContent =
+        bestCombo;
+
+    finalAttemptsElement.textContent =
+        attempts;
+
+    finalTimeElement.textContent =
+        timerElement.textContent;
+
+
+    game.classList.add(
+        "hidden"
+    );
+
+    victory.classList.remove(
+        "hidden"
     );
 
 }
 
 
-// ==========================================
-// ATUALIZAR PLACAR
-// ==========================================
+/* =========================================
+   GAME OVER
+========================================= */
 
-function updateScore() {
+function gameOver() {
 
-    scoreElement.textContent =
+    clearInterval(
+        timerInterval
+    );
+
+
+    gameOverScoreElement.textContent =
         score;
 
+    gameOverComboElement.textContent =
+        bestCombo;
 
-    attemptsElement.textContent =
+    gameOverAttemptsElement.textContent =
         attempts;
+
+    gameOverTimeElement.textContent =
+        timerElement.textContent;
+
+
+    game.classList.add(
+        "hidden"
+    );
+
+    gameOverScreen.classList.remove(
+        "hidden"
+    );
 
 }
 
 
-// ==========================================
-// VOLTAR AO MENU
-// ==========================================
+/* =========================================
+   VOLTAR AO MENU
+========================================= */
+
+function returnToMenu() {
+
+    clearInterval(
+        timerInterval
+    );
+
+
+    game.classList.add(
+        "hidden"
+    );
+
+    victory.classList.add(
+        "hidden"
+    );
+
+    gameOverScreen.classList.add(
+        "hidden"
+    );
+
+    menu.classList.remove(
+        "hidden"
+    );
+
+
+    updateMessage();
+
+}
+
+
+/* =========================================
+   BOTÕES DO JOGO
+========================================= */
 
 backButton.addEventListener(
     "click",
-    () => {
-
-        clearInterval(
-            timerInterval
-        );
-
-
-        game.classList.add(
-            "hidden"
-        );
-
-
-        menu.classList.remove(
-            "hidden"
-        );
-
-    }
+    returnToMenu
 );
 
-
-// ==========================================
-// JOGAR NOVAMENTE
-// ==========================================
-
-playAgainButton.addEventListener(
-    "click",
-    () => {
-
-        startGame();
-
-    }
-);
-
-
-// ==========================================
-// MENU DA VITÓRIA
-// ==========================================
 
 victoryMenuButton.addEventListener(
     "click",
-    () => {
-
-        victory.classList.add(
-            "hidden"
-        );
-
-
-        menu.classList.remove(
-            "hidden"
-        );
-
-    }
+    returnToMenu
 );
 
 
-// ==========================================
-// INICIALIZAÇÃO
-// ==========================================
+gameOverMenuButton.addEventListener(
+    "click",
+    returnToMenu
+);
+
+
+playAgainButton.addEventListener(
+    "click",
+    startGame
+);
+
+
+retryButton.addEventListener(
+    "click",
+    startGame
+);
+
+
+/* =========================================
+   INICIALIZAÇÃO
+========================================= */
+
+startButton.disabled = true;
+
+updateMessage();
+
+updateScore();
+
+updateLives();
+
+updateCombo();
+
+updateAttempts();
+
+updateTimer();
+
 
 console.log(
     "🧠 Memória+ iniciado com sucesso!"

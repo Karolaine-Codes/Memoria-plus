@@ -4,7 +4,7 @@
 
 O **Memória+** é um jogo da memória desenvolvido com o objetivo de unir **diversão, aprendizagem e estímulo cognitivo** para crianças e adultos.
 
-O projeto está sendo desenvolvido de forma incremental, começando por uma versão funcional e evoluindo gradualmente com novos recursos de acessibilidade, personalização, estatísticas e, futuramente, Inteligência Artificial.
+O projeto está sendo desenvolvido de forma incremental, começando por uma versão funcional e evoluindo gradualmente com novos recursos de acessibilidade, personalização, estatísticas e, futuramente, Inteligência Artificial. Feito com a ajuda da IA.
 
 ---
 

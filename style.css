@@ -1,0 +1,863 @@
+/* ==========================
+   RESET
+========================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+/* ==========================
+   VARIÁVEIS
+========================== */
+
+:root {
+
+    --purple: #8b5cf6;
+
+    --purple-dark: #6d28d9;
+
+    --purple-text: #4c1d95;
+
+    --pink: #ec4899;
+
+    --orange: #f97316;
+
+    --green: #22c55e;
+
+    --blue: #3b82f6;
+
+    --white: #ffffff;
+
+}
+
+
+/* ==========================
+   BODY
+========================== */
+
+body {
+
+    min-height: 100vh;
+
+    font-family:
+        Arial,
+        sans-serif;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--purple),
+            var(--pink),
+            var(--orange)
+        );
+
+    padding: 20px;
+
+}
+
+
+/* ==========================
+   CONTAINER
+========================== */
+
+.container {
+
+    width: 100%;
+
+    max-width: 1000px;
+
+    margin: auto;
+
+    text-align: center;
+
+}
+
+
+/* ==========================
+   UTILIDADE
+========================== */
+
+.hidden {
+
+    display: none;
+
+}
+
+
+/* ==========================
+   CABEÇALHO
+========================== */
+
+.header {
+
+    margin-bottom: 30px;
+
+}
+
+
+.header h1 {
+
+    color: white;
+
+    font-size: 55px;
+
+    text-shadow:
+        3px 3px
+        rgba(0, 0, 0, 0.15);
+
+}
+
+
+.header p {
+
+    color: white;
+
+    font-size: 24px;
+
+    margin-top: 5px;
+
+}
+
+
+/* ==========================
+   MENU
+========================== */
+
+.menu-card {
+
+    background:
+        rgba(255, 255, 255, 0.96);
+
+    padding: 35px;
+
+    border-radius: 30px;
+
+    box-shadow:
+        0 20px 40px
+        rgba(0, 0, 0, 0.20);
+
+}
+
+
+.menu-card h2 {
+
+    color: var(--purple-text);
+
+    margin-bottom: 20px;
+
+}
+
+
+/* ==========================
+   CATEGORIAS
+========================== */
+
+.categories {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 15px;
+
+    margin-bottom: 35px;
+
+}
+
+
+.category {
+
+    border: none;
+
+    border-radius: 20px;
+
+    padding: 25px 10px;
+
+    color: white;
+
+    font-size: 18px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+
+}
+
+
+.category span {
+
+    display: block;
+
+    margin-top: 8px;
+
+}
+
+
+.category:hover {
+
+    transform:
+        translateY(-5px)
+        scale(1.03);
+
+}
+
+
+.category.selected {
+
+    outline:
+        5px solid
+        var(--purple-text);
+
+}
+
+
+.animal {
+
+    background:
+        var(--green);
+
+}
+
+
+.math {
+
+    background:
+        var(--blue);
+
+}
+
+
+.geography {
+
+    background:
+        var(--orange);
+
+}
+
+
+.science {
+
+    background:
+        var(--pink);
+
+}
+
+
+/* ==========================
+   DIFICULDADE
+========================== */
+
+.difficulty {
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 15px;
+
+    margin-bottom: 20px;
+
+}
+
+
+.difficulty-button {
+
+    border: none;
+
+    padding: 15px 25px;
+
+    border-radius: 15px;
+
+    font-size: 16px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+
+}
+
+
+.difficulty-button:hover {
+
+    transform:
+        scale(1.05);
+
+}
+
+
+.difficulty-button.selected {
+
+    outline:
+        4px solid
+        var(--purple-text);
+
+}
+
+
+.easy {
+
+    background: #bbf7d0;
+
+    color: #166534;
+
+}
+
+
+.medium {
+
+    background: #fef08a;
+
+    color: #854d0e;
+
+}
+
+
+.hard {
+
+    background: #fecaca;
+
+    color: #991b1b;
+
+}
+
+
+/* ==========================
+   MENSAGEM
+========================== */
+
+.message {
+
+    color: #6b7280;
+
+    margin-bottom: 20px;
+
+}
+
+
+/* ==========================
+   BOTÃO PRINCIPAL
+========================== */
+
+.start-button {
+
+    border: none;
+
+    background:
+        var(--purple);
+
+    color: white;
+
+    padding: 18px 40px;
+
+    border-radius: 50px;
+
+    font-size: 21px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 7px
+        var(--purple-dark);
+
+    transition: 0.15s;
+
+}
+
+
+.start-button:hover {
+
+    transform:
+        translateY(-2px);
+
+}
+
+
+.start-button:active {
+
+    transform:
+        translateY(5px);
+
+    box-shadow:
+        0 2px
+        var(--purple-dark);
+
+}
+
+
+/* ==========================
+   CABEÇALHO DO JOGO
+========================== */
+
+.game-header {
+
+    display: flex;
+
+    justify-content:
+        space-between;
+
+    align-items: center;
+
+    margin-bottom: 20px;
+
+}
+
+
+.game-header h1 {
+
+    color: white;
+
+    font-size: 40px;
+
+    text-align: left;
+
+}
+
+
+.game-header p {
+
+    color: white;
+
+    text-align: left;
+
+}
+
+
+/* ==========================
+   BOTÃO VOLTAR
+========================== */
+
+.back-button {
+
+    border: none;
+
+    background: white;
+
+    color:
+        var(--purple-text);
+
+    padding: 12px 20px;
+
+    border-radius: 15px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+}
+
+
+/* ==========================
+   PLACAR
+========================== */
+
+.score-board {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(5, 1fr);
+
+    gap: 12px;
+
+    margin-bottom: 20px;
+
+}
+
+
+.score-box {
+
+    background: white;
+
+    border-radius: 18px;
+
+    padding: 15px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 5px;
+
+    color:
+        var(--purple-text);
+
+}
+
+
+.score-box span:first-child {
+
+    font-size: 22px;
+
+}
+
+
+.score-box span:last-child {
+
+    font-size: 22px;
+
+    font-weight: bold;
+
+}
+
+
+/* ==========================
+   TABULEIRO
+========================== */
+
+.game-board {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 15px;
+
+    max-width: 700px;
+
+    margin: auto;
+
+}
+
+
+/* ==========================
+   CARTA
+========================== */
+
+.card {
+
+    aspect-ratio: 1;
+
+    border: none;
+
+    background: transparent;
+
+    cursor: pointer;
+
+    perspective: 1000px;
+
+}
+
+
+.card-inner {
+
+    position: relative;
+
+    width: 100%;
+
+    height: 100%;
+
+    transition:
+        transform 0.5s;
+
+    transform-style:
+        preserve-3d;
+
+}
+
+
+.card.flipped .card-inner {
+
+    transform:
+        rotateY(180deg);
+
+}
+
+
+.card.matched .card-inner {
+
+    transform:
+        rotateY(180deg);
+
+}
+
+
+.card-front,
+.card-back {
+
+    position: absolute;
+
+    width: 100%;
+
+    height: 100%;
+
+    border-radius: 18px;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    backface-visibility:
+        hidden;
+
+}
+
+
+.card-front {
+
+    background:
+        var(--purple);
+
+    color: white;
+
+    font-size: 40px;
+
+    box-shadow:
+        0 6px
+        var(--purple-dark);
+
+}
+
+
+.card-back {
+
+    background: white;
+
+    transform:
+        rotateY(180deg);
+
+    font-size: 45px;
+
+    box-shadow:
+        0 5px 15px
+        rgba(0, 0, 0, 0.15);
+
+}
+
+
+.card.matched .card-back {
+
+    background:
+        #dcfce7;
+
+    outline:
+        4px solid
+        var(--green);
+
+}
+
+
+/* ==========================
+   VITÓRIA
+========================== */
+
+.victory-card {
+
+    background: white;
+
+    max-width: 600px;
+
+    margin: 50px auto;
+
+    padding: 40px 30px;
+
+    border-radius: 30px;
+
+    box-shadow:
+        0 20px 40px
+        rgba(0, 0, 0, 0.2);
+
+}
+
+
+.trophy {
+
+    font-size: 80px;
+
+}
+
+
+.victory-card h1 {
+
+    color:
+        var(--purple-text);
+
+    font-size: 45px;
+
+    margin: 10px 0;
+
+}
+
+
+.victory-card p {
+
+    color: #6b7280;
+
+    font-size: 20px;
+
+    margin-bottom: 30px;
+
+}
+
+
+/* ==========================
+   RESULTADOS
+========================== */
+
+.results {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 15px;
+
+    margin-bottom: 30px;
+
+}
+
+
+.results div {
+
+    background:
+        #f3f4f6;
+
+    padding: 15px;
+
+    border-radius: 15px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 5px;
+
+    color:
+        var(--purple-text);
+
+}
+
+
+.results span {
+
+    font-size: 20px;
+
+    font-weight: bold;
+
+}
+
+
+/* ==========================
+   RESPONSIVO
+========================== */
+
+@media (max-width: 700px) {
+
+    body {
+
+        padding: 10px;
+
+    }
+
+
+    .header h1 {
+
+        font-size: 40px;
+
+    }
+
+
+    .categories {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+    }
+
+
+    .difficulty {
+
+        flex-direction: column;
+
+    }
+
+
+    .difficulty-button {
+
+        width: 100%;
+
+    }
+
+
+    .menu-card {
+
+        padding: 25px 15px;
+
+    }
+
+
+    .game-header {
+
+        flex-direction: column;
+
+        gap: 15px;
+
+    }
+
+
+    .game-header h1 {
+
+        text-align: center;
+
+        font-size: 32px;
+
+    }
+
+
+    .game-header p {
+
+        text-align: center;
+
+    }
+
+
+    .game-board {
+
+        gap: 8px;
+
+    }
+
+
+    .card-front {
+
+        font-size: 28px;
+
+    }
+
+
+    .card-back {
+
+        font-size: 32px;
+
+    }
+
+
+    .results {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    midia
+    .score-board {
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+}
+}

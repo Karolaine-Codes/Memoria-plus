@@ -120,6 +120,35 @@ Exemplo:
 - CSS3
 - JavaScript
 
+## 🌐 Publicar e usar na web e no celular
+
+O projeto já foi preparado para funcionar como PWA (Progressive Web App), o que permite:
+
+- abrir o jogo pelo navegador em desktop;
+- abrir o mesmo link no celular;
+- instalar o jogo na tela inicial do celular como um app.
+
+### Como publicar
+
+1. Suba a pasta do projeto em um serviço de hospedagem estático como:
+   - Netlify
+   - Vercel
+   - GitHub Pages
+   - Firebase Hosting
+2. Use a URL pública gerada pelo serviço.
+3. Compartilhe esse link com as pessoas.
+
+### Como instalar no celular
+
+No navegador mobile (Chrome ou Edge), abra o link do site e escolha a opção:
+
+- "Adicionar à tela inicial"
+- ou "Instalar app"
+
+Assim, o jogo funciona como um aplicativo sem precisar da Play Store.
+
+---
+
 ## 📚 Conceitos praticados
 
 Durante o desenvolvimento foram praticados conceitos como:

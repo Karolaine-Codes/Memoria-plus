@@ -1,0 +1,1277 @@
+/* =========================================
+   RESET
+========================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+/* =========================================
+   VARIÁVEIS
+========================================= */
+
+:root {
+
+    --purple-dark: #10004d;
+    --purple: #4c1d95;
+    --purple-light: #8b5cf6;
+
+    --green: #22c55e;
+    --yellow: #facc15;
+    --red: #ef4444;
+
+    --white: #ffffff;
+
+    --text-dark: #20135c;
+
+}
+
+
+/* =========================================
+   BODY
+========================================= */
+
+body {
+
+    min-height: 100vh;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    color: white;
+
+    background:
+
+        radial-gradient(
+            circle at 10% 20%,
+            rgba(139, 92, 246, 0.35),
+            transparent 25%
+        ),
+
+        radial-gradient(
+            circle at 90% 80%,
+            rgba(59, 130, 246, 0.25),
+            transparent 30%
+        ),
+
+        linear-gradient(
+            135deg,
+            #10004d,
+            #24106f 55%,
+            #10004d
+        );
+
+    padding: 25px 20px;
+
+}
+
+
+body::before {
+
+    content: "";
+
+    position: fixed;
+
+    inset: 0;
+
+    pointer-events: none;
+
+    opacity: 0.12;
+
+    background-image:
+        radial-gradient(
+            circle,
+            white 1px,
+            transparent 1px
+        );
+
+    background-size: 22px 22px;
+
+}
+
+
+/* =========================================
+   CONTAINER
+========================================= */
+
+.container {
+
+    width: 100%;
+
+    max-width: 1150px;
+
+    margin: auto;
+
+    position: relative;
+
+}
+
+
+.hidden {
+    display: none !important;
+}
+
+
+/* =========================================
+   LOGO
+========================================= */
+
+.header {
+
+    text-align: center;
+
+    margin-bottom: 25px;
+
+}
+
+
+.brand {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+}
+
+
+.brand-icon {
+
+    font-size: 60px;
+
+    filter:
+        drop-shadow(
+            0 5px 4px
+            rgba(0, 0, 0, 0.3)
+        );
+
+}
+
+
+.brand h1 {
+
+    font-size:
+        clamp(
+            45px,
+            7vw,
+            72px
+        );
+
+    font-weight: 900;
+
+    letter-spacing: -3px;
+
+    text-shadow:
+        4px 5px 0
+        rgba(0, 0, 0, 0.3);
+
+}
+
+
+.brand h1 span {
+
+    color: var(--yellow);
+
+}
+
+
+.brand p {
+
+    color: var(--yellow);
+
+    font-size: 23px;
+
+    font-weight: bold;
+
+    font-style: italic;
+
+}
+
+
+/* =========================================
+   MENU
+========================================= */
+
+.menu-card {
+
+    background:
+        rgba(15, 20, 70, 0.96);
+
+    border:
+        2px solid
+        rgba(139, 92, 246, 0.8);
+
+    border-radius: 30px;
+
+    padding: 40px;
+
+    box-shadow:
+        0 25px 60px
+        rgba(0, 0, 0, 0.35);
+
+}
+
+
+.menu-intro {
+
+    text-align: center;
+
+    margin-bottom: 30px;
+
+}
+
+
+.intro-label {
+
+    color: #c4b5fd;
+
+    font-size: 13px;
+
+    font-weight: bold;
+
+    letter-spacing: 1.5px;
+
+}
+
+
+.menu-intro h2 {
+
+    font-size: 30px;
+
+    margin-top: 8px;
+
+}
+
+
+.menu-intro p {
+
+    color: #c9c7e8;
+
+    margin-top: 8px;
+
+}
+
+
+/* =========================================
+   CATEGORIAS
+========================================= */
+
+.categories {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 16px;
+
+    margin-bottom: 32px;
+
+}
+
+
+.category {
+
+    min-height: 170px;
+
+    border: 3px solid
+        rgba(255,255,255,0.18);
+
+    border-radius: 22px;
+
+    color: white;
+
+    font-size: 20px;
+
+    font-weight: 900;
+
+    cursor: pointer;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 12px;
+
+    transition:
+        transform .2s,
+        filter .2s;
+
+    box-shadow:
+        0 10px 20px
+        rgba(0,0,0,.25);
+
+}
+
+
+.category-icon {
+
+    font-size: 62px;
+
+}
+
+
+.category:hover {
+
+    transform:
+        translateY(-6px)
+        scale(1.02);
+
+    filter:
+        brightness(1.1);
+
+}
+
+
+.category.selected {
+
+    outline:
+        4px solid white;
+
+    outline-offset:
+        4px;
+
+    transform:
+        translateY(-5px)
+        scale(1.02);
+
+    box-shadow:
+        0 0 0 8px
+        rgba(168,85,247,.35),
+
+        0 15px 30px
+        rgba(0,0,0,.35);
+
+}
+
+
+.animal {
+
+    background:
+        linear-gradient(
+            145deg,
+            #43e56d,
+            #13a948
+        );
+
+}
+
+
+.math {
+
+    background:
+        linear-gradient(
+            145deg,
+            #b65cff,
+            #6e2ed2
+        );
+
+}
+
+
+.geography {
+
+    background:
+        linear-gradient(
+            145deg,
+            #31a8ff,
+            #1664c8
+        );
+
+}
+
+
+.science {
+
+    background:
+        linear-gradient(
+            145deg,
+            #ffab1f,
+            #ef6d00
+        );
+
+}
+
+
+/* =========================================
+   TÍTULO
+========================================= */
+
+.section-title {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+    margin-bottom: 18px;
+
+}
+
+
+.section-title span {
+
+    flex: 1;
+
+    height: 2px;
+
+    background:
+        rgba(168,85,247,.6);
+
+}
+
+
+.section-title h2 {
+
+    font-size: 24px;
+
+    white-space: nowrap;
+
+}
+
+
+/* =========================================
+   DIFICULDADE
+========================================= */
+
+.difficulty {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 16px;
+
+}
+
+
+.difficulty-button {
+
+    border: 3px solid
+        rgba(255,255,255,.2);
+
+    border-radius: 18px;
+
+    padding: 18px;
+
+    font-size: 20px;
+
+    font-weight: 900;
+
+    color: white;
+
+    cursor: pointer;
+
+    transition: .2s;
+
+    box-shadow:
+        0 8px 15px
+        rgba(0,0,0,.25);
+
+}
+
+
+.difficulty-button:hover {
+
+    transform:
+        translateY(-4px);
+
+}
+
+
+.difficulty-button.selected {
+
+    outline:
+        4px solid white;
+
+    outline-offset:
+        4px;
+
+    transform:
+        translateY(-4px)
+        scale(1.03);
+
+}
+
+
+.easy {
+
+    background:
+        linear-gradient(
+            145deg,
+            #35e46b,
+            #10ad4a
+        );
+
+}
+
+
+.medium {
+
+    background:
+        linear-gradient(
+            145deg,
+            #ffd82f,
+            #f0a900
+        );
+
+}
+
+
+.hard {
+
+    background:
+        linear-gradient(
+            145deg,
+            #ff4d43,
+            #db1f1f
+        );
+
+}
+
+
+/* =========================================
+   MENSAGEM
+========================================= */
+
+.message {
+
+    min-height: 25px;
+
+    margin: 20px 0;
+
+    text-align: center;
+
+    color: #c9c7e8;
+
+    font-weight: bold;
+
+}
+
+
+.message-info {
+
+    color: #c4b5fd;
+
+}
+
+
+.message-success {
+
+    color: #86efac;
+
+}
+
+
+/* =========================================
+   BOTÃO
+========================================= */
+
+.start-button {
+
+    display: block;
+
+    margin: auto;
+
+    border: 0;
+
+    border-radius: 999px;
+
+    padding: 18px 48px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #58f13d,
+            #18b52f
+        );
+
+    color: white;
+
+    font-size: 23px;
+
+    font-weight: 900;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 8px 0 #087c20,
+
+        0 15px 25px
+        rgba(0,0,0,.3);
+
+    transition: .15s;
+
+}
+
+
+.start-button:hover {
+
+    transform:
+        translateY(-3px);
+
+    filter:
+        brightness(1.08);
+
+}
+
+
+.start-button:active {
+
+    transform:
+        translateY(4px);
+
+    box-shadow:
+        0 3px 0 #087c20;
+
+}
+
+
+.start-button:disabled {
+
+    opacity: .45;
+
+    cursor: not-allowed;
+
+    transform: none;
+
+    filter: grayscale(.5);
+
+}
+
+
+/* =========================================
+   RECURSOS
+========================================= */
+
+.feature-strip {
+
+    margin-top: 18px;
+
+    padding: 18px;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(5, 1fr);
+
+    gap: 10px;
+
+    background:
+        rgba(73,31,142,.75);
+
+    border:
+        2px solid
+        rgba(168,85,247,.6);
+
+    border-radius: 20px;
+
+}
+
+
+.feature {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 5px 10px;
+
+    border-right:
+        1px solid
+        rgba(255,255,255,.15);
+
+}
+
+
+.feature:last-child {
+
+    border-right: 0;
+
+}
+
+
+.feature > span {
+
+    font-size: 30px;
+
+}
+
+
+.feature strong,
+.feature small {
+
+    display: block;
+
+}
+
+
+.feature small {
+
+    color: #c9c7e8;
+
+    margin-top: 3px;
+
+}
+
+
+/* =========================================
+   CABEÇALHO DO JOGO
+========================================= */
+
+.game-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 20px;
+
+}
+
+
+.game-header h1 {
+
+    font-size: 40px;
+
+}
+
+
+.game-header p {
+
+    color: #c4b5fd;
+
+}
+
+
+.back-button {
+
+    border: 0;
+
+    border-radius: 14px;
+
+    padding: 12px 20px;
+
+    background: white;
+
+    color: var(--purple);
+
+    font-weight: 900;
+
+    cursor: pointer;
+
+}
+
+
+/* =========================================
+   PLACAR
+========================================= */
+
+.score-board {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(5, 1fr);
+
+    gap: 12px;
+
+    margin-bottom: 25px;
+
+}
+
+
+.score-box {
+
+    background: white;
+
+    color: var(--purple);
+
+    border-radius: 18px;
+
+    padding: 14px 8px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 4px;
+
+    text-align: center;
+
+}
+
+
+.score-box span:first-child {
+
+    font-size: 22px;
+
+}
+
+
+.score-box span:last-child {
+
+    font-size: 18px;
+
+    font-weight: 900;
+
+}
+
+
+#combo.combo-active {
+
+    color: #f97316;
+
+    font-size: 25px;
+
+    animation:
+        comboPulse .5s
+        infinite alternate;
+
+}
+
+
+@keyframes comboPulse {
+
+    from {
+        transform: scale(1);
+    }
+
+    to {
+        transform: scale(1.15);
+    }
+
+}
+
+
+/* =========================================
+   TABULEIRO
+========================================= */
+
+.game-board {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 15px;
+
+    max-width: 720px;
+
+    margin: auto;
+
+}
+
+
+.card {
+
+    aspect-ratio: 1;
+
+    border: 0;
+
+    background: transparent;
+
+    cursor: pointer;
+
+    perspective: 1000px;
+
+}
+
+
+.card-inner {
+
+    position: relative;
+
+    width: 100%;
+
+    height: 100%;
+
+    transform-style:
+        preserve-3d;
+
+    transition:
+        transform .5s;
+
+}
+
+
+.card.flipped .card-inner,
+.card.matched .card-inner {
+
+    transform:
+        rotateY(180deg);
+
+}
+
+
+.card-front,
+.card-back {
+
+    position: absolute;
+
+    inset: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 18px;
+
+    backface-visibility:
+        hidden;
+
+}
+
+
+.card-front {
+
+    background:
+        linear-gradient(
+            145deg,
+            #8b5cf6,
+            #5b21b6
+        );
+
+    font-size: 40px;
+
+    box-shadow:
+        0 6px 0 #35127b;
+
+}
+
+
+.card-back {
+
+    background: white;
+
+    transform:
+        rotateY(180deg);
+
+    font-size: 45px;
+
+    box-shadow:
+        0 8px 20px
+        rgba(0,0,0,.2);
+
+}
+
+
+.card.matched .card-back {
+
+    background:
+        #dcfce7;
+
+    outline:
+        4px solid
+        #22c55e;
+
+}
+
+
+/* =========================================
+   RESULTADO
+========================================= */
+
+.result-card {
+
+    max-width: 650px;
+
+    margin: 50px auto;
+
+    padding: 40px 30px;
+
+    background: white;
+
+    color: var(--purple);
+
+    border-radius: 30px;
+
+    text-align: center;
+
+    box-shadow:
+        0 25px 50px
+        rgba(0,0,0,.3);
+
+}
+
+
+.result-icon {
+
+    font-size: 80px;
+
+}
+
+
+.result-card h1 {
+
+    font-size: 45px;
+
+    margin: 10px 0;
+
+}
+
+
+.result-card p {
+
+    color: #6b7280;
+
+    font-size: 20px;
+
+    margin-bottom: 30px;
+
+}
+
+
+.results {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 12px;
+
+    margin-bottom: 30px;
+
+}
+
+
+.results div {
+
+    background:
+        #f3f4f6;
+
+    padding: 15px 8px;
+
+    border-radius: 15px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 5px;
+
+}
+
+
+.results div span:first-child {
+
+    font-size: 24px;
+
+}
+
+
+.results div span:last-child {
+
+    font-size: 22px;
+
+    font-weight: 900;
+
+}
+
+
+.result-menu-button {
+
+    display: block;
+
+    margin: 15px auto 0;
+
+}
+
+
+.game-over-card {
+
+    border-top:
+        7px solid
+        #ef4444;
+
+}
+
+
+/* =========================================
+   RESPONSIVIDADE
+========================================= */
+
+@media (max-width: 950px) {
+
+    .categories {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+    }
+
+
+    .feature-strip {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+    }
+
+
+    .feature {
+
+        border-right: 0;
+
+    }
+
+
+    .score-board {
+
+        grid-template-columns:
+            repeat(3, 1fr);
+
+    }
+
+}
+
+
+@media (max-width: 650px) {
+
+    body {
+
+        padding: 12px;
+
+    }
+
+
+    .menu-card {
+
+        padding: 25px 16px;
+
+    }
+
+
+    .brand-icon {
+
+        font-size: 40px;
+
+    }
+
+
+    .brand h1 {
+
+        font-size: 45px;
+
+    }
+
+
+    .brand p {
+
+        font-size: 18px;
+
+    }
+
+
+    .category {
+
+        min-height: 135px;
+
+        font-size: 17px;
+
+    }
+
+
+    .category-icon {
+
+        font-size: 48px;
+
+    }
+
+
+    .difficulty {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .feature-strip {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .game-header {
+
+        flex-direction: column;
+
+        gap: 15px;
+
+    }
+
+
+    .game-header h1 {
+
+        font-size: 32px;
+
+    }
+
+
+    .score-board {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+    }
+
+
+    .game-board {
+
+        gap: 8px;
+
+    }
+
+
+    .card-front {
+
+        font-size: 28px;
+
+    }
+
+
+    .card-back {
+
+        font-size: 32px;
+
+    }
+
+
+    .results {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+    }
+
+
+    .result-card h1 {
+
+        font-size: 35px;
+
+    }
+
+}

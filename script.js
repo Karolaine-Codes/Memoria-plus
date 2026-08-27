@@ -44,6 +44,33 @@ const gameOverMenuButton =
 const message =
     document.querySelector("#message");
 
+const loginScreen =
+    document.querySelector("#login");
+
+const loginForm =
+    document.querySelector("#login-form");
+
+const guestButton =
+    document.querySelector("#guest-button");
+
+const logoutButton =
+    document.querySelector("#logout-button");
+
+const playerNameInput =
+    document.querySelector("#player-name");
+
+const playerNameLabel =
+    document.querySelector("#player-name-label");
+
+const bestScoreElement =
+    document.querySelector("#best-score");
+
+const rankingElement =
+    document.querySelector("#ranking");
+
+const globalRankingList =
+    document.querySelector("#global-ranking-list");
+
 const scoreElement =
     document.querySelector("#score");
 
@@ -122,7 +149,21 @@ let matchedPairs = 0;
 
 let score = 0;
 
-let lives = 3;
+const DEFAULT_MAX_LIVES = 6;
+
+const HARD_MODE_EXTRA_LIVES = 2;
+
+let lives = DEFAULT_MAX_LIVES;
+
+const livesChancesElement = document.querySelector("#lives-chances");
+
+function getMaxLives() {
+
+    return selectedDifficulty === "hard"
+        ? DEFAULT_MAX_LIVES + HARD_MODE_EXTRA_LIVES
+        : DEFAULT_MAX_LIVES;
+
+}
 
 let combo = 0;
 
@@ -133,6 +174,60 @@ let attempts = 0;
 let seconds = 0;
 
 let timerInterval = null;
+
+let audioContext = null;
+
+let bestScore = 0;
+
+const PLAYER_NAME_KEY = "memoria-plus-player-name";
+
+const BEST_SCORE_KEY = "memoria-plus-best-score";
+
+const RANKING_KEY = "memoria-plus-ranking";
+
+const GLOBAL_RANKING_KEY = "memoria-plus-global-ranking";
+
+const SUPABASE_TABLE = "leaderboard";
+
+const SUPABASE_CONFIG =
+    window.MEMORIA_PLUS_SUPABASE || {};
+
+const SUPABASE_URL =
+    SUPABASE_CONFIG.url || "";
+
+const SUPABASE_ANON_KEY =
+    SUPABASE_CONFIG.anonKey || "";
+
+const SUPABASE_ENABLED =
+    Boolean(SUPABASE_URL && SUPABASE_ANON_KEY);
+
+const rankingTemplate = {
+
+    animals: {
+        easy: 0,
+        medium: 0,
+        hard: 0
+    },
+
+    math: {
+        easy: 0,
+        medium: 0,
+        hard: 0
+    },
+
+    geography: {
+        easy: 0,
+        medium: 0,
+        hard: 0
+    },
+
+    science: {
+        easy: 0,
+        medium: 0,
+        hard: 0
+    }
+
+};
 
 
 /* =========================================
@@ -251,7 +346,7 @@ categoryButtons.forEach(button => {
             selectedCategory =
                 button.dataset.category;
 
-
+            updateRankingDisplay();
             updateMessage();
 
         }
@@ -289,7 +384,7 @@ difficultyButtons.forEach(button => {
             selectedDifficulty =
                 button.dataset.difficulty;
 
-
+            updateRankingDisplay();
             updateMessage();
 
         }
@@ -303,6 +398,13 @@ difficultyButtons.forEach(button => {
 ========================================= */
 
 function updateMessage() {
+
+    if (livesChancesElement) {
+        livesChancesElement.textContent =
+            selectedDifficulty === "hard"
+                ? "Oito chances"
+                : "Seis chances";
+    }
 
     startButton.disabled =
         !(
@@ -379,13 +481,648 @@ function updateMessage() {
 }
 
 
+function getStoredBestScore() {
+
+    try {
+
+        const savedScore =
+            Number(
+                localStorage.getItem(
+                    BEST_SCORE_KEY
+                )
+            );
+
+        return Number.isFinite(savedScore)
+            ? savedScore
+            : 0;
+
+    } catch (error) {
+
+        return 0;
+
+    }
+
+}
+
+
+function getPlayerName() {
+
+    try {
+
+        const storedName =
+            localStorage.getItem(
+                PLAYER_NAME_KEY
+            );
+
+        return storedName && storedName.trim()
+            ? storedName.trim()
+            : "Visitante";
+
+    } catch (error) {
+
+        return "Visitante";
+
+    }
+
+}
+
+
+function setPlayerName(name) {
+
+    const cleanName =
+        (name || "Visitante")
+            .trim()
+            .slice(0, 18) || "Visitante";
+
+    try {
+
+        localStorage.setItem(
+            PLAYER_NAME_KEY,
+            cleanName
+        );
+
+    } catch (error) {
+
+        console.warn(
+            "Não foi possível guardar o nome do jogador.",
+            error
+        );
+
+    }
+
+    if (playerNameLabel) {
+        playerNameLabel.textContent =
+            cleanName;
+    }
+
+    return cleanName;
+
+}
+
+
+function enterGame(name) {
+
+    const currentPlayerName =
+        setPlayerName(name);
+
+    loginScreen.classList.add("hidden");
+    menu.classList.remove("hidden");
+
+    if (playerNameInput) {
+        playerNameInput.value =
+            currentPlayerName === "Visitante"
+                ? ""
+                : currentPlayerName;
+    }
+
+}
+
+
+function logoutPlayer() {
+
+    setPlayerName("Visitante");
+    localStorage.removeItem(PLAYER_NAME_KEY);
+
+    loginScreen.classList.remove("hidden");
+    menu.classList.add("hidden");
+
+    if (playerNameInput) {
+        playerNameInput.value = "";
+    }
+
+    if (playerNameLabel) {
+        playerNameLabel.textContent = "Visitante";
+    }
+
+}
+
+
+function normalizeRankingEntry(entry) {
+
+    return {
+        name: String(entry?.name || "Visitante").slice(0, 18),
+        score: Number(entry?.score || 0),
+        category: entry?.category || "Geral",
+        difficulty: entry?.difficulty || "Médio"
+    };
+
+}
+
+function buildSupabaseHeaders() { return { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}`, "Content-Type": "application/json" }; }
+
+async function fetchGlobalRankingFromSupabase() {
+
+    if (!SUPABASE_ENABLED) {
+        return [];
+    }
+
+    try {
+
+        const endpoint = `${SUPABASE_URL.replace(/\/$/, "")}/rest/v1/${SUPABASE_TABLE}?select=name,score,category,difficulty&order=score.desc&limit=5`;
+
+        const response = await fetch(
+            endpoint,
+            {
+                headers: buildSupabaseHeaders()
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error(`Erro do Supabase: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        return Array.isArray(data)
+            ? data.map(normalizeRankingEntry)
+            : [];
+
+    } catch (error) {
+
+        console.warn("Não foi possível carregar a tabela do Supabase.", error);
+        return [];
+
+    }
+
+}
+
+async function pushGlobalRankingToSupabase(entry) {
+
+    if (!SUPABASE_ENABLED || !entry?.name || !entry?.score) {
+        return;
+    }
+
+    try {
+
+        const endpoint = `${SUPABASE_URL.replace(/\/$/, "")}/rest/v1/${SUPABASE_TABLE}`;
+
+        await fetch(
+            endpoint,
+            {
+                method: "POST",
+                headers: {
+                    ...buildSupabaseHeaders(),
+                    Prefer: "return=representation"
+                },
+                body: JSON.stringify({
+                    name: entry.name,
+                    score: Number(entry.score),
+                    category: entry.category,
+                    difficulty: entry.difficulty
+                })
+            }
+        );
+
+    } catch (error) {
+
+        console.warn("Falha ao enviar score para o Supabase.", error);
+
+    }
+
+}
+
+function getGlobalRanking() {
+
+    try {
+
+        const ranking =
+            JSON.parse(
+                localStorage.getItem(
+                    GLOBAL_RANKING_KEY
+                ) || "[]"
+            );
+
+        return Array.isArray(ranking)
+            ? ranking.map(normalizeRankingEntry)
+            : [];
+
+    } catch (error) {
+
+        return [];
+
+    }
+
+}
+
+
+function seedGlobalRanking() {
+
+    const currentRanking =
+        getGlobalRanking();
+
+    if (currentRanking.length > 0) {
+        return currentRanking;
+    }
+
+    const seedEntries = [
+        { name: "Nina", score: 920, category: "Animais", difficulty: "Médio" },
+        { name: "Theo", score: 880, category: "Matemática", difficulty: "Difícil" },
+        { name: "Luiza", score: 830, category: "Ciências", difficulty: "Fácil" },
+        { name: "Kai", score: 780, category: "Geografia", difficulty: "Médio" },
+        { name: "Júlia", score: 760, category: "Animais", difficulty: "Fácil" }
+    ];
+
+    localStorage.setItem(
+        GLOBAL_RANKING_KEY,
+        JSON.stringify(seedEntries)
+    );
+
+    return seedEntries;
+
+}
+
+
+async function updateGlobalRanking() {
+
+    let ranking = [...seedGlobalRanking()].map(normalizeRankingEntry);
+
+    if (SUPABASE_ENABLED) {
+        const remoteRanking = await fetchGlobalRankingFromSupabase();
+        ranking = [...ranking, ...remoteRanking]
+            .sort((a, b) => Number(b.score) - Number(a.score))
+            .slice(0, 5);
+    } else {
+        ranking = ranking
+            .sort((a, b) => Number(b.score) - Number(a.score))
+            .slice(0, 5);
+    }
+
+    if (!globalRankingList) {
+        return;
+    }
+
+    globalRankingList.innerHTML =
+        ranking.map(
+            (entry, index) => `
+                <li class="ranking-item">
+                    <span class="ranking-position">#${index + 1}</span>
+                    <span class="ranking-player">${entry.name}</span>
+                    <span class="ranking-score">${entry.score} pts</span>
+                </li>
+            `
+        ).join("");
+
+}
+
+
+async function addScoreToGlobalRanking(name, score, category, difficulty) {
+
+    if (!name || !score) {
+        return;
+    }
+
+    const ranking =
+        seedGlobalRanking();
+
+    ranking.push({
+        name,
+        score,
+        category,
+        difficulty
+    });
+
+    ranking.sort(
+        (a, b) => b.score - a.score
+    );
+
+    const topRanking =
+        ranking.slice(0, 10);
+
+    try {
+
+        localStorage.setItem(
+            GLOBAL_RANKING_KEY,
+            JSON.stringify(topRanking)
+        );
+
+    } catch (error) {
+
+        console.warn(
+            "Não foi possível salvar o ranking mundial.",
+            error
+        );
+
+    }
+
+    if (SUPABASE_ENABLED) {
+        await pushGlobalRankingToSupabase({
+            name,
+            score,
+            category,
+            difficulty
+        });
+    }
+
+    await updateGlobalRanking();
+
+}
+
+
+function updateBestScoreDisplay() {
+
+    bestScore =
+        Math.max(
+            bestScore,
+            getStoredBestScore()
+        );
+
+    bestScoreElement.textContent =
+        `🏅 Recorde: ${bestScore}`;
+
+}
+
+
+function saveBestScore(currentScore) {
+
+    const nextBestScore =
+        Math.max(
+            bestScore,
+            currentScore
+        );
+
+    bestScore = nextBestScore;
+
+    try {
+
+        localStorage.setItem(
+            BEST_SCORE_KEY,
+            String(nextBestScore)
+        );
+
+    } catch (error) {
+
+        console.warn(
+            "Não foi possível salvar o melhor score.",
+            error
+        );
+
+    }
+
+    updateBestScoreDisplay();
+
+}
+
+
+function getStoredRanking() {
+
+    try {
+
+        const rawRanking =
+            JSON.parse(
+                localStorage.getItem(
+                    RANKING_KEY
+                ) || "{}"
+            );
+
+        return {
+            ...rankingTemplate,
+            ...rawRanking,
+            animals: {
+                ...rankingTemplate.animals,
+                ...(rawRanking.animals || {})
+            },
+            math: {
+                ...rankingTemplate.math,
+                ...(rawRanking.math || {})
+            },
+            geography: {
+                ...rankingTemplate.geography,
+                ...(rawRanking.geography || {})
+            },
+            science: {
+                ...rankingTemplate.science,
+                ...(rawRanking.science || {})
+            }
+        };
+
+    } catch (error) {
+
+        return {
+            ...rankingTemplate
+        };
+
+    }
+
+}
+
+
+function saveCategoryScore(category, difficulty, score) {
+
+    if (!category || !difficulty) {
+        return;
+    }
+
+    const ranking =
+        getStoredRanking();
+
+    const currentDifficultyRecord =
+        ranking[category][difficulty] ?? 0;
+
+    ranking[category][difficulty] =
+        Math.max(
+            currentDifficultyRecord,
+            score
+        );
+
+    try {
+
+        localStorage.setItem(
+            RANKING_KEY,
+            JSON.stringify(ranking)
+        );
+
+    } catch (error) {
+
+        console.warn(
+            "Não foi possível salvar o ranking da categoria.",
+            error
+        );
+
+    }
+
+    updateRankingDisplay();
+
+}
+
+
+function updateRankingDisplay() {
+
+    const ranking =
+        getStoredRanking();
+
+    const difficultyLabels = {
+
+        easy: "Fácil",
+        medium: "Médio",
+        hard: "Difícil"
+
+    };
+
+    const categoryEntries =
+        Object.entries(
+            categoryNames
+        );
+
+    if (rankingElement) {
+
+        rankingElement.innerHTML =
+            categoryEntries.map(
+                ([category, label]) => {
+
+                    const scores =
+                        ranking[category] || {
+                            easy: 0,
+                            medium: 0,
+                            hard: 0
+                        };
+
+                    return `
+                        <div class="ranking-item ${selectedCategory === category ? "active" : ""}">
+                            <span class="ranking-label">${label}</span>
+                            <div class="ranking-scores">
+                                ${Object.entries(difficultyLabels).map(([difficulty, text]) => {
+                                    return `<span class="ranking-pill ${difficulty}">${text}: ${scores[difficulty] ?? 0}</span>`;
+                                }).join("")}
+                            </div>
+                        </div>
+                    `;
+
+                }
+            ).join("");
+
+    }
+
+}
+
+
+function initializeAudio() {
+
+   const AudioContextClass =
+       window.AudioContext ||
+       window.webkitAudioContext;
+
+   if (!AudioContextClass) {
+       return;
+   }
+
+   if (!audioContext) {
+       audioContext = new AudioContextClass();
+   }
+
+   if (audioContext.state === "suspended") {
+       audioContext.resume();
+   }
+
+}
+
+
+function playTone(
+   frequency,
+   duration,
+   type = "sine",
+   volume = 0.04,
+   slide = 0
+) {
+
+   if (!audioContext) {
+       return;
+   }
+
+   const oscillator =
+       audioContext.createOscillator();
+
+   const gainNode =
+       audioContext.createGain();
+
+   oscillator.type = type;
+   oscillator.frequency.setValueAtTime(
+       frequency,
+       audioContext.currentTime
+   );
+
+   if (slide) {
+       oscillator.frequency.linearRampToValueAtTime(
+           frequency + slide,
+           audioContext.currentTime + duration
+       );
+   }
+
+   gainNode.gain.setValueAtTime(
+       0.0001,
+       audioContext.currentTime
+   );
+
+   gainNode.gain.exponentialRampToValueAtTime(
+       volume,
+       audioContext.currentTime + 0.02
+   );
+
+   gainNode.gain.exponentialRampToValueAtTime(
+       0.0001,
+       audioContext.currentTime + duration
+   );
+
+   oscillator.connect(gainNode);
+   gainNode.connect(audioContext.destination);
+
+   oscillator.start(audioContext.currentTime);
+   oscillator.stop(audioContext.currentTime + duration);
+
+}
+
+
+function playSound(type) {
+
+   initializeAudio();
+
+   if (!audioContext) {
+       return;
+   }
+
+   if (type === "match") {
+       playTone(660, 0.08, "triangle", 0.05, 80);
+       setTimeout(() => {
+           playTone(880, 0.12, "triangle", 0.04, 60);
+       }, 70);
+       return;
+   }
+
+   if (type === "mismatch") {
+       playTone(220, 0.16, "sawtooth", 0.04, -50);
+       return;
+   }
+
+   if (type === "win") {
+       playTone(392, 0.13, "triangle", 0.05, 45);
+       setTimeout(() => {
+           playTone(523, 0.13, "triangle", 0.05, 55);
+       }, 100);
+       setTimeout(() => {
+           playTone(659, 0.18, "triangle", 0.05, 65);
+       }, 200);
+       return;
+   }
+
+   if (type === "game-over") {
+       playTone(180, 0.2, "square", 0.05, -30);
+       setTimeout(() => {
+           playTone(140, 0.25, "square", 0.04, -25);
+       }, 160);
+   }
+
+}
+
+
 /* =========================================
    INICIAR
 ========================================= */
 
 startButton.addEventListener(
     "click",
-    startGame
+    () => {
+        initializeAudio();
+        startGame();
+    }
 );
 
 
@@ -453,7 +1190,7 @@ function resetGame() {
 
     score = 0;
 
-    lives = 3;
+    lives = getMaxLives();
 
     combo = 0;
 
@@ -734,13 +1471,16 @@ function handleMatch() {
     const points =
         calculatePoints();
 
-
     score += points;
 
+    saveBestScore(score);
+    saveCategoryScore(selectedCategory, selectedDifficulty, score);
 
     updateScore();
 
     updateCombo();
+
+    playSound("match");
 
 
     setTimeout(
@@ -763,7 +1503,6 @@ function handleMatch() {
     );
 
 }
-
 
 /* =========================================
    PONTUAÇÃO
@@ -813,7 +1552,7 @@ function handleMismatch() {
 
     updateLives();
 
-    updateCombo();
+    playSound("mismatch");
 
 
     setTimeout(
@@ -842,7 +1581,6 @@ function handleMismatch() {
     );
 
 }
-
 
 /* =========================================
    RESETAR TURNO
@@ -877,12 +1615,13 @@ function updateScore() {
 
 function updateLives() {
 
+    const maxLives = getMaxLives();
     let hearts = "";
 
 
     for (
         let i = 0;
-        i < 3;
+        i < maxLives;
         i++
     ) {
 
@@ -998,6 +1737,17 @@ function finishGame() {
         timerInterval
     );
 
+    playSound("win");
+
+
+    saveBestScore(score);
+    saveCategoryScore(selectedCategory, selectedDifficulty, score);
+    addScoreToGlobalRanking(
+        getPlayerName(),
+        score,
+        categoryNames[selectedCategory],
+        selectedDifficulty
+    );
 
     finalScoreElement.textContent =
         score;
@@ -1033,6 +1783,17 @@ function gameOver() {
         timerInterval
     );
 
+    playSound("game-over");
+
+
+    saveBestScore(score);
+    saveCategoryScore(selectedCategory, selectedDifficulty, score);
+    addScoreToGlobalRanking(
+        getPlayerName(),
+        score,
+        categoryNames[selectedCategory],
+        selectedDifficulty
+    );
 
     gameOverScoreElement.textContent =
         score;
@@ -1115,14 +1876,63 @@ gameOverMenuButton.addEventListener(
 
 playAgainButton.addEventListener(
     "click",
-    startGame
+    () => {
+        initializeAudio();
+        startGame();
+    }
 );
 
 
 retryButton.addEventListener(
     "click",
-    startGame
+    () => {
+        initializeAudio();
+        startGame();
+    }
 );
+
+
+loginForm.addEventListener(
+   "submit",
+   (event) => {
+       event.preventDefault();
+
+       const currentPlayerName =
+           setPlayerName(
+               playerNameInput.value || "Visitante"
+           );
+
+       loginScreen.classList.add("hidden");
+       menu.classList.remove("hidden");
+
+       if (selectedCategory && selectedDifficulty) {
+           addScoreToGlobalRanking(
+               currentPlayerName,
+               bestScore,
+               categoryNames[selectedCategory],
+               selectedDifficulty
+           );
+       }
+
+   }
+);
+
+
+guestButton.addEventListener(
+   "click",
+   () => {
+       enterGame("Visitante");
+   }
+);
+
+if (logoutButton) {
+   logoutButton.addEventListener(
+       "click",
+       () => {
+           logoutPlayer();
+       }
+   );
+}
 
 
 /* =========================================
@@ -1130,6 +1940,30 @@ retryButton.addEventListener(
 ========================================= */
 
 startButton.disabled = true;
+
+const savedPlayerName =
+    getPlayerName();
+
+if (playerNameLabel) {
+    playerNameLabel.textContent =
+        savedPlayerName;
+}
+
+if (playerNameInput) {
+    playerNameInput.value =
+        savedPlayerName === "Visitante"
+            ? ""
+            : savedPlayerName;
+}
+
+bestScore = getStoredBestScore();
+
+updateBestScoreDisplay();
+updateRankingDisplay();
+updateGlobalRanking();
+
+loginScreen.classList.remove("hidden");
+menu.classList.add("hidden");
 
 updateMessage();
 
@@ -1165,5 +1999,5 @@ if ("serviceWorker" in navigator) {
 }
 
 console.log(
-    "🧠 Memória+ iniciado com sucesso!"
+    "🧠 Memória+ Academy iniciado com sucesso!"
 );

@@ -12,15 +12,35 @@
 
     <meta
         name="description"
-        content="Memória+ - Jogo da memória educativo para crianças e adultos."
+        content="Memória+ é um jogo educativo premium de memória para aprender brincando, em web e celular."
     >
 
     <meta
         name="theme-color"
-        content="#6c5ce7"
+        content="#6d5efc"
     >
 
-    <title>Memória+ | Jogo da Memória</title>
+    <meta
+        property="og:title"
+        content="Memória+"
+    >
+
+    <meta
+        property="og:description"
+        content="Jogo educativo premium de memória para web e celular, com aprendizado e competição em uma experiência moderna."
+    >
+
+    <meta
+        property="og:type"
+        content="website"
+    >
+
+    <meta
+        property="og:image"
+        content="icon.svg"
+    >
+
+    <title>Memória+</title>
 
     <link
         rel="manifest"
@@ -38,6 +58,13 @@
         href="style.css"
     >
 
+    <script>
+        window.MEMORIA_PLUS_SUPABASE = {
+            url: "https://SEU_PROJETO.supabase.co",
+            anonKey: "SUA_CHAVE_ANON"
+        };
+    </script>
+
 </head>
 
 
@@ -45,37 +72,97 @@
 
 <main class="container">
 
+    <section id="login" class="login-screen">
+
+        <div class="login-scene" aria-hidden="true">
+            <span class="float-badge">🐶</span>
+            <span class="float-badge">➕</span>
+            <span class="float-badge">🌎</span>
+            <span class="float-badge">🔬</span>
+        </div>
+
+       <div class="login-card">
+
+           <div class="login-visual" aria-hidden="true">
+
+               <div class="brain-badge">🧠</div>
+
+               <div class="mini-card mini-card-one">🐶</div>
+               <div class="mini-card mini-card-two">➕</div>
+               <div class="mini-card mini-card-three">🌎</div>
+
+           </div>
+
+           <div class="login-icon">🎮</div>
+
+           <div class="login-brand">
+               <h1>Memória+</h1>
+               <div class="brain-mark" aria-hidden="true">🧠</div>
+           </div>
+
+           <p class="login-tagline">
+               Desafie sua mente. Aprenda com diversão.
+           </p>
+
+           <form id="login-form" class="login-form">
+
+               <label for="player-name" class="sr-only">
+                   Nome do jogador
+               </label>
+
+               <input
+                   id="player-name"
+                   name="playerName"
+                   type="text"
+                   maxlength="18"
+                   placeholder="Seu nome"
+                   autocomplete="nickname"
+               >
+
+               <button
+                   type="submit"
+                   class="start-button login-button"
+               >
+                   Entrar no jogo
+               </button>
+
+               <button
+                   id="guest-button"
+                   type="button"
+                   class="ghost-button"
+               >
+                   Continuar como visitante
+               </button>
+
+           </form>
+
+       </div>
+
+    </section>
+
 
     <!-- ================================
          MENU PRINCIPAL
     ================================= -->
 
-    <section id="menu">
+    <section id="menu" class="hidden">
 
-        <header class="header">
+        <div class="menu-status" aria-live="polite">
 
-            <div class="brand">
-
-                <div class="brand-icon">
-                    🧠
-                </div>
-
-                <div>
-
-                    <h1>
-                        Memória<span>+</span>
-                    </h1>
-
-                    <p>
-                        Aprenda brincando!
-                    </p>
-
-                </div>
-
+            <div class="player-tag">
+                <span>Login:</span>
+                <strong id="player-name-label">Visitante</strong>
             </div>
 
-        </header>
+            <button
+                id="logout-button"
+                type="button"
+                class="ghost-button small"
+            >
+                Sair da conta
+            </button>
 
+        </div>
 
         <section class="menu-card">
 
@@ -170,6 +257,17 @@
             </div>
 
 
+            <div class="leaderboard-box">
+
+                <div class="leaderboard-header">
+                    <h3>Ranking mundial</h3>
+                    <span>Top 5</span>
+                </div>
+
+                <ol id="global-ranking-list" class="global-ranking-list"></ol>
+
+            </div>
+
             <!-- DIFICULDADE -->
 
             <div class="section-title">
@@ -223,6 +321,18 @@
                 Escolha uma categoria e uma dificuldade.
             </p>
 
+            <p
+                id="best-score"
+                class="best-score"
+            >
+                🏅 Recorde: 0
+            </p>
+
+            <div
+                id="ranking"
+                class="ranking"
+            ></div>
+
 
             <button
                 id="start-button"
@@ -256,7 +366,7 @@
 
                 <div>
                     <strong>Vidas</strong>
-                    <small>Três chances</small>
+                    <small id="lives-chances">Seis chances</small>
                 </div>
             </div>
 
@@ -309,11 +419,11 @@
             <div>
 
                 <h1>
-                    🧠 Memória+
+                    🧠 Memória+ Academy
                 </h1>
 
                 <p id="category-name">
-                    Jogo da memória
+                    Jogo da memória premium
                 </p>
 
             </div>
@@ -358,7 +468,7 @@
                 </strong>
 
                 <span id="lives">
-                    ❤️ ❤️ ❤️
+                    ❤️ ❤️ ❤️ ❤️ ❤️ ❤️
                 </span>
 
             </div>

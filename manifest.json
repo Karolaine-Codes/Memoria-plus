@@ -1,7 +1,7 @@
 {
-  "name": "Memória+",
+  "name": "Memória+ Academy",
   "short_name": "Memória+",
-  "description": "Jogo da memória educativo para crianças e adultos.",
+  "description": "Jogo educativo premium de memória para aprender, competir e evoluir.",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#f5f7ff",

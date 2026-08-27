@@ -1,10 +1,29 @@
-# 🧠 Memória+
+# 🧠 Memória+ Academy
 
-Um jogo da memória educativo desenvolvido para crianças e adultos, com foco em aprendizagem, diversão e desenvolvimento de habilidades cognitivas.
+Um jogo da memória educativo premium, desenvolvido para crianças e adultos, com foco em aprendizagem, diversão, progressão e experiência moderna em web e celular.
 
 ## 🎮 Sobre o projeto
 
-O Memória+ foi desenvolvido como um projeto prático durante minha formação em Inteligência Artificial. O projeto está sendo desenvolvido de forma incremental, começando por uma versão funcional e evoluindo gradualmente com novos recursos de acessibilidade, personalização, estatísticas e, futuramente, Inteligência Artificial. Feito com a ajuda da IA.
+O Memória+ Academy foi pensado como uma experiência premium de aprendizagem por meio de jogos. O projeto combina interface moderna, design voltado para experiência mobile, ranking competitivo e mecânicas de memória com foco em reforço do conhecimento.
+
+## 🏷️ Identidade final de lançamento
+
+Nome oficial: Memória+ Academy
+
+Tagline: Aprenda brincando. Conquiste conhecimento.
+
+Direção visual: premium, educativa, gamer, mobile-first.
+
+Capa para campanha e compartilhamento:
+- foco em aprendizado com diversão
+- visual premium, moderno e amigável
+- elementos de jogo, memória e conhecimento
+- uso de gradientes vibrantes e ilustrações de educação
+
+Mensagem principal:
+- "Jogo da memória premium para aprender, competir e evoluir."
+- "Estude com diversão, em qualquer lugar, no navegador ou no celular."
+- "Memória+ Academy combina educação, desafio e gameplay envolvente."
 
 ## 🎯 Objetivo do Projeto
 
@@ -128,15 +147,53 @@ O projeto já foi preparado para funcionar como PWA (Progressive Web App), o que
 - abrir o mesmo link no celular;
 - instalar o jogo na tela inicial do celular como um app.
 
-### Como publicar
+### Como publicar no Netlify (passo a passo)
 
-1. Suba a pasta do projeto em um serviço de hospedagem estático como:
-   - Netlify
-   - Vercel
-   - GitHub Pages
-   - Firebase Hosting
-2. Use a URL pública gerada pelo serviço.
-3. Compartilhe esse link com as pessoas.
+1. Acesse o Netlify e clique em **Add new site** → **Import an existing project**.
+2. Conecte sua conta do GitHub ou escolha a opção de upload da pasta.
+3. Se estiver usando GitHub, selecione o repositório do projeto e clique em **Deploy site**.
+4. Se estiver enviando a pasta manualmente, arraste a pasta do projeto para o Netlify e aguarde a publicação.
+5. O Netlify gera uma URL pública do tipo `https://nome-do-projeto.netlify.app`.
+6. Depois do deploy, abra a URL e teste no navegador.
+7. Para celular, basta abrir esse link no Chrome/Edge e escolher **Adicionar à Tela Inicial**.
+
+### Ranking mundial real com Supabase
+
+O jogo já foi preparado para conectar com Supabase. Antes do deploy, preencha as credenciais no arquivo `index.html`:
+
+```js
+window.MEMORIA_PLUS_SUPABASE = {
+  url: "https://SEU_PROJETO.supabase.co",
+  anonKey: "SUA_CHAVE_ANON"
+};
+```
+
+Depois, crie a tabela no Supabase:
+
+```sql
+create table public.leaderboard (
+  id uuid default gen_random_uuid() primary key,
+  name text not null,
+  score integer not null default 0,
+  category text,
+  difficulty text,
+  created_at timestamptz default now()
+);
+
+alter table public.leaderboard enable row level security;
+
+create policy "Permitir leitura pública"
+on public.leaderboard
+for select
+using (true);
+
+create policy "Permitir envio público"
+on public.leaderboard
+for insert
+with check (true);
+```
+
+Se as chaves não estiverem preenchidas, o jogo usa o ranking local do navegador como fallback.
 
 ### Como instalar no celular
 

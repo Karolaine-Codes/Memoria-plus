@@ -1,18 +1,18 @@
-# 🧠 Memória+ Academy
+# 🧠 Memória+
 
-Um jogo da memória educativo premium, desenvolvido para crianças e adultos, com foco em aprendizagem, diversão, progressão e experiência moderna em web e celular.
+Um jogo da memória educativo premium, pensado para aprender brincando em navegador e celular, com foco em experiência moderna, progressão e desafio inteligente.
 
 ## 🎮 Sobre o projeto
 
-O Memória+ Academy foi pensado como uma experiência premium de aprendizagem por meio de jogos. O projeto combina interface moderna, design voltado para experiência mobile, ranking competitivo e mecânicas de memória com foco em reforço do conhecimento.
+O Memória+ foi pensado como uma experiência premium de aprendizagem por meio de jogos. O projeto combina interface moderna, design mobile-first, ranking competitivo e mecânicas de memória com foco em reforço do conhecimento.
 
 ## 🏷️ Identidade final de lançamento
 
-Nome oficial: Memória+ Academy
+Nome oficial: Memória+
 
-Tagline: Aprenda brincando. Conquiste conhecimento.
+Tagline: Desafie sua mente. Aprenda com diversão.
 
-Direção visual: premium, educativa, gamer, mobile-first.
+Direção visual: premium educacional, moderna, elegante, mobile-first.
 
 Capa para campanha e compartilhamento:
 - foco em aprendizado com diversão
@@ -23,7 +23,7 @@ Capa para campanha e compartilhamento:
 Mensagem principal:
 - "Jogo da memória premium para aprender, competir e evoluir."
 - "Estude com diversão, em qualquer lugar, no navegador ou no celular."
-- "Memória+ Academy combina educação, desafio e gameplay envolvente."
+- "Memória+ combina educação, desafio e gameplay envolvente."
 
 ## 🎯 Objetivo do Projeto
 
